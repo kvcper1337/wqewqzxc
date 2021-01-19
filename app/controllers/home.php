@@ -2,6 +2,7 @@
 class Home extends CI_Controller{
 	public function index()
 	{
+		$this->load->library('cart');
 		$data = array();
 		$data['product'] = $this->products->getrows();
 

@@ -1,9 +1,10 @@
 <?php
 class Users extends CI_Controller
 {
+
 	public function register()
 	{
-
+		$this->load->library('cart');
 		$this->load->helper('security');
 		xss_clean('username');
 		xsS_clean('email');
@@ -45,7 +46,7 @@ class Users extends CI_Controller
 
 			if ($user_id) {
 				$user_data = array(
-						'user_id' => $user_id,
+						'id' => $user_id,
 					   'username' => $username,
 					  'logged_in' => true
 				);
@@ -58,10 +59,11 @@ class Users extends CI_Controller
 			}
 
 			}
+
 		}
 			public function logout(){
 			$this->session->unset_userdata('logged_in');
-			$this->session->unset_userdata('user_id');
+			$this->session->unset_userdata('id');
 			$this->session->unset_userdata('username');
 			$this->session->sess_destroy();
 

@@ -43,7 +43,7 @@
 						<ul class="nav navbar-nav">
 							<li><a href=""><i class="fa fa-user"></i> Account</a></li>
 							<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
-							<li><a href="register.php"><i class="fa fa-crosshairs"></i> order-card</a></li>
+							<li><a href="<?php echo base_url() ?>cart/index" title="View Cart"><i class="icart"></i> <?php echo 'Twoj koszyk ('. ($this->cart->total_items()).')' ?></a></li>
 							<?php echo form_open('users/logout'); ?>
 							<li><a href="<?php echo base_url()?>users/logout"><i class="fa fa-shopping-cart"></i> Wyloguj</a></li>
 						</ul>
@@ -53,6 +53,7 @@
 				<div class="col-md-8 clearfix">
 					<div class="shop-menu clearfix pull-right">
 						<ul class="nav navbar-nav">
+							<li><a href="<?php echo base_url() ?>cart/index" title="View Cart"><i class="icart"></i> <?php echo 'Twoj koszyk ('. ($this->cart->total_items()).')' ?></a></li>
 							<li><a href="<?php echo base_url()?>users/register"> Logowanie/Rejestracja</a></li>
 						</ul>
 					</div>
@@ -87,7 +88,7 @@
 									<li><a href="shop.html">Products</a></li>
 									<li><a href="product-details.html">Product Details</a></li>
 									<li><a href="register.php">Checkout</a></li>
-									<li><a href="cart.html">login</a></li>
+									<li><a href="<?php echo base_url() ?>cart/index" title="View Cart"><i class="icart"></i> <?php echo 'Twoj koszyk ('. ($this->cart->total_items()).')' ?></a></li>
 									<li><a href="<?php echo base_url();?>users/register">Register</a></li>
 								</ul>
 							</li>
