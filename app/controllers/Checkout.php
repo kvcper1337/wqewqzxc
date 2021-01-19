@@ -1,74 +1,129 @@
 <?php
-class Checkout extends CI_Controller{
-public function __construct()
-{parent::__construct();
-$this->load->library('form_validation');
-$this->load->helper('form');
-$this->load->library('cart');
-$this->load->model('products');
-$this->load->model('user_model');
-$this->load->view('checkout/index');
-}
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Checkout extends CI_Controller
+{
+
+	function __construct()
+	{
+		parent::__construct();
+
+		// Load form library & helper
+		$this->load->library('form_validation');
+		$this->load->helper('form');
+
+		// Load cart library
+		$this->load->library('cart');
+
+		// Load product model
+		$this->load->model('products');
+
+		$this->controller = 'checkout';
+	}
+
 	function index()
 	{
+		// Redirect if the cart is empty
 		if ($this->cart->total_items() <= 0) {
-			redirected('home/index');
-
+			redirect('products/');
 		}
 
-			$this->input->post('placeOrder');
-			$data = $this->session->userdata('id');
-			$insert = $this->products->getorder($data);
-				$order = $this->placeOrder($insert);
+		$custData = $data = array();
+
+		// If order request is submitted
+		$submit = $this->input->post('placeOrder');
+		if (isset($submit)) {
+			// Form field validation rules
 
 
-				if ($order) {
-					$this->session->set_userdata('success_msg', 'Order placed successfully.');
-					redirect($this->controller . '/orderSuccess/' . $order);
+			$this->form_validation->set_rules('phone', 'phone:', 'required');
+			$this->form_validation->set_rules('address', 'Address:', 'required');
+
+			// Prepare customer data
+			$custData = array(
+				'phone' => $this->input->post('phone'),
+				'address' => $this->input->post('address')
+			);
+
+			// Validate submitted form data
+			if ($this->form_validation->run() == true) {
+				// Insert customer data
+				$insert = $this->products->insertCustomer($custData);
+
+				// Check customer data insert status
+				if ($insert) {
+					// Insert order
+					$order = $this->placeOrder($insert);
+
+					// If the order submission is successful
+					if ($order) {
+						$this->session->set_userdata('success_msg', 'Order placed successfully.');
+						redirect($this->controller . '/orderSuccess/' . $order);
+					} else {
+						$data['error_msg'] = 'Order submission failed, please try again.';
+					}
 				} else {
-					$data['error_msg'] = 'Order submission failed, please try again.';
+					$data['error_msg'] = 'Some problems occured, please try again.';
 				}
-
-		$data['cartitems'] = $this->cart->contents();
-		$this->load->view($this->controller . '/index', $data);
-}
-	public function placeorder($custid){
-	$ordata = array(
-		'user_id' => $custid,
-		'grand_total' => $this->cart->total()
-
-
-	);
-
-		$insertorder = $this->products->insertorder($ordata);
-	if($insertorder){
-		$cartitems = $this->cart->contents();
-		$orditemdata = array();
-		$i = 0;
-		foreach($cartitems as $item){
-			$orditemdata[$i]['order_id'] = $insertorder;
-			$orditemdata[$i]['product_id'] = $item['id'];
-			$orditemdata[$i]['quantity'] = $item['qty'];
-			$orditemdata[$i]['order_id'] = $item["subtotal"];
-			$i++;
-		}
-		if(!empty($orditemdata)){
-			$insertorderitems = $this->products->insertorderitems($orditemdata);
-			if($insertorderitems){
-				$this->cart->destroy();
-				return $insertorder;
-
 			}
 		}
+
+
+		// Customer data
+		$data['custData'] = $custData;
+
+		// Retrieve cart data from the session
+		$data['cartItems'] = $this->cart->contents();
+
+		// Pass products data to the view
+		$this->load->view($this->controller . '/index', $data);
 	}
-	return false;
+
+	function placeOrder($custID){
+		// Insert order data
+		$ordData = array(
+			'user_id' => $custID,
+			'grand_total' => $this->cart->total()
+		);
+		$insertOrder = $this->products->insertOrder($ordData);
+
+		if($insertOrder){
+			// Retrieve cart data from the session
+			$cartItems = $this->cart->contents();
+
+			// Cart items
+			$ordItemData = array();
+			$i=0;
+			foreach($cartItems as $item){
+				$ordItemData[$i]['order_id']     = $insertOrder;
+				$ordItemData[$i]['product_id']     = $item['id'];
+				$ordItemData[$i]['quantity']     = $item['qty'];
+				$ordItemData[$i]['sub_total']     = $item["subtotal"];
+				$i++;
+			}
+
+			if(!empty($ordItemData)){
+				// Insert order items
+				$insertOrderItems = $this->products->insertOrderItems($ordItemData);
+
+				if($insertOrderItems){
+					// Remove items from the cart
+					$this->cart->destroy();
+
+					// Return order ID
+					return $insertOrder;
+				}
+			}
+		}
+		return false;
 	}
-	public function ordersucces($ordid){
-	$data['order'] = $this->products->getorder($ordid);
-	$this->load->view($this->controller. '/order-success/', $data);
+
+	function orderSuccess($ordID){
+		// Fetch order data from the database
+		$data['order'] = $this->products->getOrder($ordID);
+
+		// Load order details view
+		$this->load->view($this->controller.'/order-success', $data);
+	}
+
 }
-}
-
-
-
-
