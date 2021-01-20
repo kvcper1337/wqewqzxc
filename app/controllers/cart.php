@@ -19,7 +19,7 @@ class Cart extends CI_Controller
 
 	public function updateitemqty()
 	{
-		$updade = 0;
+
 		$rowid = $this->input->get('rowid');
 		$qty = $this->input->get('qty');
 		if(!empty($rowid) && !empty($qty)){
@@ -32,13 +32,11 @@ class Cart extends CI_Controller
 		echo $update?'ok': 'error';
 	}
 	public function removeitem($rowid){
-		$remove = $this->cart->remove($rowid);
+		$this->cart->remove($rowid);
 		redirect('cart/index');
 	}
-		 public function removeall(){
-			 $this->cart->destroy;
-			redirect('cart/index');
-}
+
+
 
 
 }

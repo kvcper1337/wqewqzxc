@@ -44,7 +44,8 @@
 											</td>
 											<td> <?php echo $item["name"]; ?></td>
 											<td> <?php echo '$'.$item['price'] ?></td>
-											<td>  <input type="number" class="form-control text-center" value="<?php echo $item["qty"];?>" onchange=""updatecartitem(this, <?php echo $item["rowid"]; ?> ></td>
+
+											<td>  <input type="number" class="form-control text-center" value="<?php echo $item["qty"];?>" onchange="updatecartitem(this, <?php echo $item["rowid"]; ?>" ></td>
 											<td class="text-right"><?php echo '$'.$item["subtotal"]; ?></td>
 											<td class="text-right"><button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete item?')?window.location.href='<?php echo base_url('cart/removeitem/'.$item["rowid"]); ?>':false;">X<i class="itrash"></i> </button> </td>
 										</tr>
@@ -53,7 +54,7 @@
 										<?php } ?>
 										<?php if($this->cart->total_items() > 0){ ?>
 										<tr>
-											<td><td class="text-right"><button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete item?')?window.location.href='<?php echo base_url()?>cart/removeall ':false;"><i class="itrash">X</i> </button> </td>
+
 											<td></td>
 											<td></td>
 											<td><strong>Cart Total</strong></td>
@@ -64,14 +65,25 @@
 								</tbody>
 			</table>
 					<div class="row">
-						<div class="col-sm-12 col-md-6">
-							<a href="<?php echo base_url();?>home/index" class="btn btn-block btn-dark">Continue shopping</a>
+						<div class="col-sm-12 col-md-6 ">
+							<a href="<?php echo base_url();?>home/index" class="btn btn-lg  btn-dark btn-block btn-primary">Continue shopping</a>
 						</div>
+						<?php if($this->session->userdata('logged_in')) : ?>
 						<div class="col-sm-12 col-md-6 text-right">
 
 							<a href="<?php echo base_url();?>checkout/index" class="btn btn-lg btn-block btn-primary">CHECKOUT</a>
 
 						</div>
+						<?php else : ?>
+						<div class="col-sm-12 col-md-6 text-right">
+
+							<p class="btn btn-lg btn-block btn-primary">CHECKOUT
+							<p class="alert alert-dismissable alert-danger">zaloguj sie by kontynuowac
+							</p>
+
+						</div>
+					<?php endif; ?>
+
 					</div>
 
 	</div>

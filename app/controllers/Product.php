@@ -20,7 +20,7 @@ class Product extends CI_Controller
 			'image' => $product['image']
 		);
 		$this->cart->insert($data);
-		redirect('cart/index');
+		redirect('home/index');
 
 
 	}

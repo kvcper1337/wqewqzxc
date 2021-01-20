@@ -37,7 +37,7 @@ class Products extends CI_Model{
 	 * @param id returns a single record of the specified ID
 	 */
 	public function getOrder($id){
-		$this->db->select('o.*, c.name, c.email, c.phone, c.address');
+		$this->db->select('o.*, c.username, c.email');
 		$this->db->from($this->ordTable.' as o');
 		$this->db->join($this->custTable.' as c', 'c.id = o.user_id', 'left');
 		$this->db->where('o.id', $id);
@@ -61,14 +61,9 @@ class Products extends CI_Model{
 	 * @param data array
 	 */
 	public function insertCustomer($data){
-		if(!array_key_exists("created", $data)){
-			$data['created'] = date("Y-m-d H:i:s");
-		}
-		if(!array_key_exists("modified", $data)){
-			$data['modified'] = date("Y-m-d H:i:s");
-		}
-		$this->db->insert($this->custTable, $data);
-		$this->db->where('username', $this->session->userdata("username"));
+		$result = $this->db->get_where('user', array('id' => $data['id']), $data);
+		return $result;
+
 	}
 
 	/*

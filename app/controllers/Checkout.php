@@ -19,6 +19,7 @@ class Checkout extends CI_Controller
 		$this->load->model('products');
 
 		$this->controller = 'checkout';
+
 	}
 
 	function index()
@@ -36,13 +37,15 @@ class Checkout extends CI_Controller
 			// Form field validation rules
 
 
-			$this->form_validation->set_rules('phone', 'phone:', 'required');
-			$this->form_validation->set_rules('address', 'Address:', 'required');
-
+			$this->form_validation->set_rules('city', 'city', 'required');
+			$this->form_validation->set_rules('adres', 'adres', 'required');
+			$this->form_validation->set_rules('zip-code', 'zip-code', 'required');
 			// Prepare customer data
 			$custData = array(
+				'id' => $this->session->userdata('id'),
 				'phone' => $this->input->post('phone'),
-				'address' => $this->input->post('address')
+				'address' => $this->input->post('address'),
+				'zip-code' => $this->input->post('zip-code')
 			);
 
 			// Validate submitted form data
@@ -82,8 +85,11 @@ class Checkout extends CI_Controller
 	function placeOrder($custID){
 		// Insert order data
 		$ordData = array(
-			'user_id' => $custID,
-			'grand_total' => $this->cart->total()
+			'user_id' => $this->session->userdata('id'),
+			'grand_total' => $this->cart->total(),
+			'city' => $this->input->post('city'),
+				'adres' => $this->input->post('adres'),
+			'zip-code' => $this->input->post('zip-code')
 		);
 		$insertOrder = $this->products->insertOrder($ordData);
 
