@@ -1,4 +1,4 @@
-<?php var_dump($this->session->userdata('id'));?>
+
 <footer id="footer"><!--Footer-->
 	<div class="footer-top">
 		<div class="container">
