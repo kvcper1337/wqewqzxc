@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 13 Sty 2021, 14:05
+-- Czas generowania: 22 Sty 2021, 15:49
 -- Wersja serwera: 5.7.17
 -- Wersja PHP: 5.6.30
 
@@ -35,8 +35,8 @@ CREATE TABLE `product` (
   `price` double(10,2) NOT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `date` date DEFAULT NULL,
-  `status` enum('1','0') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '1=Active | 0=Inactive'
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '1=Active | 0=Inactive'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Zrzut danych tabeli `product`
@@ -48,11 +48,11 @@ INSERT INTO `product` (`id`, `brand`, `name`, `price`, `image`, `date`, `status`
 (3, 'GUCCI', 'sukienka', 739.99, 'images/x/product3.jpg', '2021-01-03', '1'),
 (4, 'GUCCI', 'sukienka2', 590.99, 'images/x/product4.jpg', '2021-01-04', '1'),
 (5, 'Nike', 'PULLOVER', 239.00, 'images/x/product5.jpg', '2021-01-03', '1'),
-(10, 'basic', 'basic tshirt grey', 29.99, 'images/x/product10.jpg', NULL, '1'),
-(8, 'ARMANi', 'sukienka balowa', 129.99, 'images/x/product8.jpg', '2021-01-12', '1'),
 (6, 'UA', 't-shirt bialy white', 45.99, 'images/x/product6.jpg', '2021-01-07', '1'),
 (7, 'DIOR', 'sukienka balowa', 1000.00, 'images/x/product7.jpg', '2021-01-03', '1'),
-(9, 'LEE', 'sukienka chinska', 249.99, 'images/x/product9.jpg', '2021-01-03', '1');
+(8, 'ARMANi', 'sukienka balowa', 129.99, 'images/x/product8.jpg', '2021-01-12', '1'),
+(9, 'LEE', 'sukienka chinska', 249.99, 'images/x/product9.jpg', '2021-01-03', '1'),
+(10, 'basic', 'basic tshirt grey', 29.99, 'images/x/product10.jpg', NULL, '1');
 
 -- --------------------------------------------------------
 
@@ -64,17 +64,24 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
   `password` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
-  `firstname` varchar(128) NOT NULL,
-  `lastname` varchar(128) NOT NULL,
-  `email` varchar(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `firstname` varchar(128) CHARACTER SET latin1 NOT NULL,
+  `lastname` varchar(128) CHARACTER SET latin1 NOT NULL,
+  `email` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `phone` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Zrzut danych tabeli `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `firstname`, `lastname`, `email`) VALUES
-(19, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin', 'admin@admin.admin');
+INSERT INTO `user` (`id`, `username`, `password`, `firstname`, `lastname`, `email`, `phone`, `address`, `created`, `modified`) VALUES
+(19, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin', 'admin@admin.admin', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(20, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin', 'admin@admin.admin', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(21, 'admin', 'c84258e9c39059a89ab77d846ddab909', 'admin', 'admin', 'admin@admin.admin', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(22, 'smil9r1337', 'd82b11267bdaec3dd0780eabf7ad065b', 'Kacper', 'Ko??ikowski', 'smil9r1337@gmail.com', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -100,12 +107,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT dla tabeli `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT dla tabeli `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
